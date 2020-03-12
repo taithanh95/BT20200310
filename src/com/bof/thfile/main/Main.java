@@ -16,7 +16,7 @@ public class Main {
 		dataNumberList.add("8");
 		dataNumberList.add("4");
 		dataNumberList.add("6");
-		
+		 
 		test.sumOfNumber(dataNumberList );
 		
 	}

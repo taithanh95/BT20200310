@@ -31,11 +31,15 @@ public class FileManager {
 		int num = 11;
 		for (int i = 0; i < dataNumberList.size() - 1; i++) {
 			for (int j = i + 1; j < dataNumberList.size(); j++) {
+
 				int value1 = Integer.parseInt(dataNumberList.get(i));
 				int value2 = Integer.parseInt(dataNumberList.get(j));
-
+				
 				if (value1 + value2 == num) {
+					int vTri= dataNumberList.indexOf(value2);
+					dataNumberList.remove(vTri);
 					System.out.println(value1 + "," + value2);
+					System.out.println(vTri);
 				}
 			}
 		}
