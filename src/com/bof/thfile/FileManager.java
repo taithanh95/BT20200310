@@ -1,14 +1,18 @@
 package com.bof.thfile;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 
 public class FileManager {
+	private final static int num = 11;
 	private File fileSrc;
+	private String path;
 
 	public FileManager(String path) {
+		this.path = path;
 		this.fileSrc = new File(path);
 	}
 
@@ -26,22 +30,58 @@ public class FileManager {
 			return;
 		}
 	}
-
-	public void sumOfNumber(List<String> dataNumberList) {
-		int num = 11;
-		for (int i = 0; i < dataNumberList.size() - 1; i++) {
-			for (int j = i + 1; j < dataNumberList.size(); j++) {
-
-				int value1 = Integer.parseInt(dataNumberList.get(i));
-				int value2 = Integer.parseInt(dataNumberList.get(j));
-				
-				if (value1 + value2 == num) {
-					int vTri= dataNumberList.indexOf(value2);
-					dataNumberList.remove(vTri);
-					System.out.println(value1 + "," + value2);
-					System.out.println(vTri);
-				}
+	
+	public void writeText(String text, boolean isAppend) throws IOException {
+		File file = new File(path);
+		
+		try {
+			FileOutputStream out = new FileOutputStream(file, isAppend);
+			byte[] buff = text.getBytes();
+			out.write(buff);
+			
+			out.close();
+			System.out.println("Ghi file thanh cong");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readText() {
+		File file = new File(path);
+		if (!file.exists()) {
+			return;
+		}
+		try {
+			String text = "";
+			FileInputStream in = new FileInputStream(file);
+			byte buff[] = new byte[1024];
+			
+			int len = in.read(buff);
+			while (len > 0) {
+				text += new String(buff, 0, len);
+				len = in.read(buff);
+			}
+			in.close();
+			System.out.println("Text: " +"\n" + text);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void findCoupleNumber(List<Integer> dataNumberList) {
+		boolean checkFind = false;
+		for (int i = 1; i < dataNumberList.size(); i++) {
+			if (dataNumberList.get(0) + dataNumberList.get(i) == num) {
+				checkFind = true;
+				System.out.println(dataNumberList.get(0) + "," + dataNumberList.get(i));
+				dataNumberList.remove(i);
+				dataNumberList.remove(0);
+				break;
 			}
 		}
+		if (!checkFind)
+			dataNumberList.remove(0);
+		if (dataNumberList.size() >= 2)
+			findCoupleNumber(dataNumberList);
 	}
 }
