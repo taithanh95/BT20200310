@@ -1,13 +1,10 @@
 package com.bof.thfile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
+import java.util.Random;
 
 public class FileManager {
-	private final static int num = 11;
 	private File fileSrc;
 	private String path;
 
@@ -68,10 +65,10 @@ public class FileManager {
 		}
 	}
 	
-	public void findCoupleNumber(List<Integer> dataNumberList) {
+	public void findCoupleNumber(int sum, List<Integer> dataNumberList) {
 		boolean checkFind = false;
 		for (int i = 1; i < dataNumberList.size(); i++) {
-			if (dataNumberList.get(0) + dataNumberList.get(i) == num) {
+			if (dataNumberList.get(0) + dataNumberList.get(i) == sum) {
 				checkFind = true;
 				System.out.println(dataNumberList.get(0) + "," + dataNumberList.get(i));
 				dataNumberList.remove(i);
@@ -82,6 +79,41 @@ public class FileManager {
 		if (!checkFind)
 			dataNumberList.remove(0);
 		if (dataNumberList.size() >= 2)
-			findCoupleNumber(dataNumberList);
+			findCoupleNumber(sum, dataNumberList);
+	}
+
+	public String writeTextFile(String filePath, List<String> data) {
+		if (filePath == null || "".equals(filePath.trim()) || data == null || data.isEmpty()) {
+			return "Data input is null";
+		}
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(filePath);
+			bw = new BufferedWriter(fw);
+			for (int i = 0; i < data.size(); i++) {
+				bw.write(data.get(i));
+				bw.newLine();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Exception when write file";
+		} finally {
+			try {
+				if (bw != null) {
+					bw.close();
+				}
+				if (fw != null) {
+					fw.close();
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return "OK";
+	}
+
+	public int getRandomBetweenRange(int min, int max) {
+		return min + new Random().nextInt(max);
 	}
 }
